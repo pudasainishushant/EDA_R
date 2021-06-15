@@ -36,6 +36,16 @@ newdf$class <- apply(newdf, 1, myFunction)
 ### the number of data of each category is not equal from the above analysis. so removing certain data from category 0 to balance the dataset
 trimmedDf<-newdf[500:615,]
 
+install.packages('VIM')
+library(VIM)
+aggr_plot <- aggr(trimmedDf, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+install.packages('mice')
+library(mice)
+naremovedDF <- mice(trimmedDf,m=5,maxit=50,meth='pmm',seed=500)
+summary(naremovedDF)
+sum(is.na(naremovedDF))
+
+
 ### removing the na values
 row.has.na <- apply(trimmedDf, 1, function(x){any(is.na(x))})
 
